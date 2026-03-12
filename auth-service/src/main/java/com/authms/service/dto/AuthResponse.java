@@ -1,6 +1,7 @@
 package com.authms.service.dto;
 
 import com.authms.service.entity.Role;
+import com.authms.service.entity.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +30,6 @@ public class AuthResponse {
         private String phone;
         private String name;
         private String avatarUrl;
-        private Set<Role> roles;
+        private UserRole roles;
     }
 }

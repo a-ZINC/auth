@@ -26,4 +26,8 @@ public class UserRole {
     private Role role;
 
     private String platform;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
 }

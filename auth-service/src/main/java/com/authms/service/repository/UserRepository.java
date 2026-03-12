@@ -1,6 +1,7 @@
 package com.authms.service.repository;
 
 import com.authms.service.entity.User;
+import com.authms.service.entity.UserRole;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

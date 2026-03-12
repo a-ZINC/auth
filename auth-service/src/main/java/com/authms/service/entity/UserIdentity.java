@@ -40,6 +40,10 @@ public class UserIdentity {
         @Builder.Default
         private Boolean verified = false;
 
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "userId")
+        private User user;
+
         @PrePersist
         protected void onCreate() {
                 if (createdAt == null) {
