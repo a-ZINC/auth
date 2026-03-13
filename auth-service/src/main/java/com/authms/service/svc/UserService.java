@@ -54,12 +54,33 @@ public class UserService {
                         .userId(user.getId())
                         .platform(platform)
                         .build();
-                UserRoleRepository
-
+                userRoleRepository.save(role);
+                return buildResponse(user, role);
             }
         }
 
 
+        User user = findExistingUser(email, phone);
+        if (user != null) {
+            log.info(
+                    "Linking {} provider to existing user: {}",
+                    provider,
+                    maskIdentifier(identifier)
+            );
+            Optional<UserRole> existingRole = userRoleRepository.findUserRoleByUserId(user.getId());
+            if (existingRole.isPresent()) {
+                linkIdentity(user, provider, identifier);
+                return buildResponse(user, existingRole.get());
+            }
+        }
+
+        log.info(
+                "Creating new user via {}: {}",
+                provider,
+                maskIdentifier(identifier)
+        );
+        user = createUserAndRole(email, phone, name, avatarUrl, platform);
+        return buildResponse(user, user.getRoles().get(0));
     }
 
     public AuthResponse buildResponse(User user, UserRole role) {
@@ -129,12 +150,25 @@ public class UserService {
                 .build();
         userRepository.save(user);
         UserRole role = UserRole.builder()
-                .userId(user)
+                .userId(user.getId())
+                .role(Role.GUEST)
+                .platform(platform)
+                .user(user)
+                .build();
 
-
+        return user;
     }
 
-
+    private void linkIdentity(User user, AuthProvider authProvider, String providerId) {
+        UserIdentity identity = UserIdentity.builder()
+                .userId(user.getId())
+                .provider(authProvider)
+                .providerId(providerId)
+                .verified(true)
+                .user(user)
+                .build();
+        userIdentityRepository.save(identity);
+    }
 
 
 }

@@ -16,6 +16,6 @@ public class AuthRequest {
     private String token;
     private String otp;
     private String name;
-
+    private String platform;
 
 }
